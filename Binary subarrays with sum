@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> getPrefixSum(vector<int> nums) {
+        int n=nums.size();
+        vector<int> ret(n,0);
+        ret[0]=nums[0];
+        for(int i=1; i<n; i++) {
+            ret[i]=ret[i-1]+nums[i];
+        }
+        return ret;
+    }
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        int n=nums.size();
+        int total=0;
+        vector<int> psum=getPrefixSum(nums);
+        for(int i=0; i<n; i++) {
+            int currsum=psum[i];
+            int incsum=currsum+goal;
+            if(nums[i]) incsum-=1;
+            // cout << "currsum=" << currsum << " incsum=" << incsum << endl;
+            auto r=upper_bound(psum.begin()+i,psum.end(),incsum);
+            auto l=upper_bound(psum.begin()+i,psum.end(),incsum-1);
+            // cout << "r-l=" << r-l << endl;
+            int count=r-l;
+            total += count;
+        }
+        return total;
+    }
+};
