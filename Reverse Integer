@@ -1,0 +1,23 @@
+class Solution:
+    def reverse(self, x: int) -> int:
+        INT_MIN, INT_MAX = -2**31, 2**31 - 1
+
+        # Check the sign of x and convert it to positive if it's negative
+        sign = -1 if x < 0 else 1
+        x = abs(x)
+
+        # Reverse the integer
+        reversed_x = 0
+        while x != 0:
+            # Get the last digit
+            digit = x % 10
+            x = x // 10
+
+            # Check for overflow/underflow
+            if reversed_x > (INT_MAX - digit) / 10:
+                return 0
+
+            # Accumulate the reversed number
+            reversed_x = reversed_x * 10 + digit
+
+        return sign * reversed_x
