@@ -1,29 +1,20 @@
 class Solution {
-public:
-    vector<int> getPrefixSum(vector<int> nums) {
-        int n=nums.size();
-        vector<int> ret(n,0);
-        ret[0]=nums[0];
-        for(int i=1; i<n; i++) {
-            ret[i]=ret[i-1]+nums[i];
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int count =0;
+        int rSum = 0;
+        map.put(0,1);
+        for(int i=0;i<nums.length;i++){
+            rSum += nums[i];
+            if(map.containsKey(rSum-goal)){
+                count+=map.get(rSum-goal);
+            }
+            if(map.containsKey(rSum)){
+                map.put(rSum, map.get(rSum)+1);
+            }else{
+                map.put(rSum,1);
+            }
         }
-        return ret;
+        return count;
     }
-    int numSubarraysWithSum(vector<int>& nums, int goal) {
-        int n=nums.size();
-        int total=0;
-        vector<int> psum=getPrefixSum(nums);
-        for(int i=0; i<n; i++) {
-            int currsum=psum[i];
-            int incsum=currsum+goal;
-            if(nums[i]) incsum-=1;
-            // cout << "currsum=" << currsum << " incsum=" << incsum << endl;
-            auto r=upper_bound(psum.begin()+i,psum.end(),incsum);
-            auto l=upper_bound(psum.begin()+i,psum.end(),incsum-1);
-            // cout << "r-l=" << r-l << endl;
-            int count=r-l;
-            total += count;
-        }
-        return total;
-    }
-};
+}
